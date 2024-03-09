@@ -1,0 +1,34 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WiFi Scanner</title>
+</head>
+<body>
+  <h1>WiFi Scanner</h1>
+  <button id="scanButton">Scan WiFi</button>
+  <div id="networksList"></div>
+
+  <script>
+    document.getElementById('scanButton').addEventListener('click', async () => {
+      try {
+        const response = await fetch('/scan');
+        const networks = await response.json();
+
+        const networksList = document.getElementById('networksList');
+        networksList.innerHTML = '<h2>Available Networks:</h2>';
+
+        networks.forEach(network => {
+          const networkItem = document.createElement('p');
+          networkItem.textContent = `SSID: ${network.ssid}, Signal Strength: ${network.signal_level}`;
+          networksList.appendChild(networkItem);
+        });
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    });
+  </script>
+</body>
+</html>
